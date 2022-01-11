@@ -34,7 +34,18 @@ const game = {
 
     },
     snakeMovement: function (){
-
+        window.addEventListener("keydown", checkKeyPress, false);
+        function checkKeyPress(key){
+            if(key.keyCode == "65"){
+                console.log("a");
+            } else if(key.keyCode == "83"){
+                console.log("s")
+            } else if(key.keyCode == "68"){
+                console.log("d");
+            } else if(key.keyCode == "87"){
+                console.log("w");
+            }
+        }
     },
     snakeGrow: function (){
         food = [0, 1];
@@ -122,7 +133,7 @@ const game = {
         Array.isArray(b) &&
         a.length === b.length &&
         a.every((val, index) => val === b[index]);
-    }
 
-}
+    },
+};
 game.initGame();
