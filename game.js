@@ -102,9 +102,17 @@ const game = {
         snakeHead = snakeBody[0];
         if (this.arrayEquals(food, snakeTailLastPosition)) {
             snakeBody.unshift(snakeTail)
+            for(let i=0;i<fields.length;i++){
+            if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
+            {
+                fields[i].style.background='lightgreen'
+                food = game.initFood();
+            }
+        };
         };
         console.log(snakeBody,'snakebody',food,'food')
-        this.initSnakeBody();
+        this.initSnakeBody()
+
     },
     snakeDeath: function (){
 
