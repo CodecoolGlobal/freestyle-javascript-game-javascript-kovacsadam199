@@ -95,8 +95,8 @@ const game = {
     },
     snakeGrow: function (){
         console.log(snakeBody[0],'0 posi')
-        snakeTailLastPosition = snakeBody[0];
-        snakeHead = snakeBody[snakeBody.length-1];
+        snakeTailLastPosition = snakeBody[snakeBody.length-1];
+        snakeHead = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
             snakeBody.push(snakeTailLastPosition)
         };
