@@ -48,22 +48,26 @@ const game = {
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
-            game.snakeGrow()
+
             if (key.keyCode == "65") {
                 moveLeft()
                 game.initSnakeBody()
+                game.snakeGrow()
                 console.log("a");
             } else if (key.keyCode == "83") {
                 moveDown()
                 game.initSnakeBody()
+                game.snakeGrow()
                 console.log("s")
             } else if (key.keyCode == "68") {
                 moveRight()
                 game.initSnakeBody()
+                game.snakeGrow()
                 console.log("d");
             } else if (key.keyCode == "87") {
                 moveUp()
                 game.initSnakeBody()
+                game.snakeGrow()
                 console.log("w");
             }
             console.log(snakeBody)
@@ -71,36 +75,35 @@ const game = {
         function moveRight() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] + 1);
-            snakeBody.shift();
+            snakeTail= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveLeft() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] - 1);
-            snakeBody.shift();
+            snakeTail= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveUp() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]-1, snakeBody[snakeBody.length - 1][1]);
-            snakeBody.shift();
+            snakeTail= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveDown() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]+1, snakeBody[snakeBody.length - 1][1]);
-            snakeBody.shift();
+            snakeTail= snakeBody.shift();
             snakeBody.push(move)
         }
     },
     snakeGrow: function (){
-        console.log(snakeBody[0],'0 posi')
         snakeTailLastPosition = snakeBody[snakeBody.length-1];
         snakeHead = snakeBody[0];
-        if (this.arrayEquals(food, snakeHead)) {
-            snakeBody.push(snakeTailLastPosition)
+        if (this.arrayEquals(food, snakeTailLastPosition)) {
+            snakeBody.unshift(snakeTail)
         };
-        console.log(snakeBody,'snakebody')
+        console.log(snakeBody,'snakebody',food,'food')
         this.initSnakeBody();
     },
     snakeDeath: function (){
