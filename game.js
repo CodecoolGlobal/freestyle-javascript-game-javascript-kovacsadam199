@@ -2,6 +2,7 @@ let snakeBody, snakeHead, snakeTail, snakeTailLastPosition, fields;
 let food;
 let row;
 let col;
+let GAMESPEED = 200
 
 const game = {
     initGame: function () {
@@ -41,50 +42,66 @@ const game = {
     },
     snakeMovement: function () {
         window.addEventListener("keydown", checkKeyPress, false);
-
         function checkKeyPress(key) {
+
             if (key.keyCode == "65") {
-                moveLeft()
-                game.initSnakeBody()
-                console.log("a");
+                console.log("a")
+                game.resetIntervals();
+                const loop = setInterval(moveLeft, GAMESPEED)
+
             } else if (key.keyCode == "83") {
-                moveDown()
-                game.initSnakeBody()
                 console.log("s")
+                game.resetIntervals();
+                const loop = setInterval(moveDown, GAMESPEED)
+
             } else if (key.keyCode == "68") {
-                moveRight()
-                game.initSnakeBody()
-                console.log("d");
+                console.log("d")
+                game.resetIntervals();
+                const loop = setInterval(moveRight, GAMESPEED)
+
             } else if (key.keyCode == "87") {
-                moveUp()
-                game.initSnakeBody()
-                console.log("w");
+                console.log("w")
+                game.resetIntervals();
+                const loop = setInterval(moveUp, GAMESPEED)
             }
-            console.log(snakeBody)
         }
         function moveRight() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] + 1);
             snakeBody.shift();
             snakeBody.push(move)
+            game.initSnakeBody()
+
         }
         function moveLeft() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] - 1);
             snakeBody.shift();
             snakeBody.push(move)
+            game.initSnakeBody()
+
         }
         function moveUp() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]-1, snakeBody[snakeBody.length - 1][1]);
             snakeBody.shift();
             snakeBody.push(move)
+            game.initSnakeBody()
+
         }
         function moveDown() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]+1, snakeBody[snakeBody.length - 1][1]);
             snakeBody.shift();
             snakeBody.push(move)
+            game.initSnakeBody()
+
+        }
+    },
+    resetIntervals: function () {
+    const loop = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
+    for(let i = 0; i < loop; i++){
+        window.clearInterval(i)
         }
     },
     snakeGrow: function (){
