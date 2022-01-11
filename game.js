@@ -86,6 +86,7 @@ const game = {
                         data-col="${col}"></div>`);
     },
 
+
     initFood: function (){
 
     },
