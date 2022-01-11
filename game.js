@@ -1,30 +1,35 @@
-let snakeBody;
+let snakeBody, snakeHead, snakeTail, snakeTailLastPosition, fields;
+let food;
+let row;
+let col;
+
 const game = {
     initGame: function (){
         this.initBoard();
         this.initSnake();
         //TODO: the game setup goes here.
-        this.gameLoop(); //Use function calls like this.
+       this.gameLoop(); //Use function calls like this.
     },
     gameLoop: function (){
+        this.snakeGrow();
 
     },
-    initSnake: function (){
-        let row;
-        let col;
-        snakeBody = [[0,1], [0, 2], [0, 3]];
-        let fields = document.getElementsByClassName("field");
+    initSnakeBody: function (){
         for (let j = 0; j<snakeBody.length; j++) {
             row = snakeBody[j][0];
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
-                }
-                ;
-            }
-            ;
+                };
+            };
         };
+    },
+    initSnake: function (){
+
+        snakeBody = [[0,1], [0,2]];
+        fields = document.getElementsByClassName("field");
+        this.initSnakeBody();
 
 
     },
@@ -32,7 +37,13 @@ const game = {
 
     },
     snakeGrow: function (){
-
+        food = [0, 1];
+        snakeTailLastPosition = [0, 3];
+        snakeHead = snakeBody[0];
+        if (this.arrayEquals(food, snakeHead)) {
+            snakeBody.push(snakeTailLastPosition)
+        };
+        this.initSnakeBody();
     },
     snakeDeath: function (){
 
@@ -105,6 +116,13 @@ const game = {
     },
     invertAxis: function (){
 
+    },
+    arrayEquals: function (a, b) {
+    return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((val, index) => val === b[index]);
     }
+
 }
 game.initGame();
