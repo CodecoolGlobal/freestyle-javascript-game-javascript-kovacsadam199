@@ -1,6 +1,8 @@
+let snakeBody;
 const game = {
     initGame: function (){
         this.initBoard();
+        this.initSnake();
         //TODO: the game setup goes here.
         this.gameLoop(); //Use function calls like this.
     },
@@ -8,6 +10,22 @@ const game = {
 
     },
     initSnake: function (){
+        let row;
+        let col;
+        snakeBody = [[0,1], [0, 2], [0, 3]];
+        let fields = document.getElementsByClassName("field");
+        for (let j = 0; j<snakeBody.length; j++) {
+            row = snakeBody[j][0];
+            col = snakeBody[j][1];
+            for (let i = 0; i < fields.length; i++) {
+                if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
+                    fields[i].style.background = "blue";
+                }
+                ;
+            }
+            ;
+        };
+
 
     },
     snakeMovement: function (){
