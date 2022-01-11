@@ -1,74 +1,56 @@
-initGame();
+const game = {
+    initGame: function (){
+        //TODO: the game setup goes here.
+        this.gameLoop(); //Use function calls like this.
+    },
+    gameLoop: function (){
 
-function initGame() {
+    },
+    initSnake: function (){
 
-    // Your game can start here, but define separate functions, don't write everything in here :)
+    },
+    snakeMovement: function (){
 
+    },
+    snakeGrow: function (){
+
+    },
+    snakeDeath: function (){
+
+    },
+    initBoard: function (){
+
+    },
+    initFood: function (){
+
+    },
+    removeFood: function (){
+
+    },
+    isFood: function (){
+
+    },
+    isWall: function (){
+
+    },
+    isSnake: function (){
+
+    },
+    gameOver: function (){
+
+    },
+    snakeGoesFaster: function (){
+
+    },
+    //EXTRA STUFF
+    score: function (){
+
+    },
+    foodDespawn: function (){
+
+    },
+    invertAxis: function (){
+
+    }
 }
-
-function gameLoop() {
-
-}
-
-function initSnake() {
-
-}
-
-function snakeMovment() {
-
-}
-
-function snakeGrow() {
-
-}
-
-function snakeDeath() {
-
-}
-
-function initBoard() {
-
-}
-
-function initFood() {
-
-}
-
-function removeFood() {
-
-}
-
-function isFood() {
-
-}
-
-function isWall() {
-
-}
-
-function isSnake() {
-
-}
-
-function gameOver() {
-
-}
-
-function snakeGoesFaster() {
-
-}
-
-//extra stuff
-
-function score() {
-
-}
-
-function foodDespawn() {
-
-}
-
-function invertAxis() {
-
-}
-
+game.initGame();
