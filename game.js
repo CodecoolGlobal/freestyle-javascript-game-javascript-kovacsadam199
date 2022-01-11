@@ -1,6 +1,7 @@
 const game = {
     initGame: function (){
         this.initBoard();
+        this.initFood();
         //TODO: the game setup goes here.
         this.gameLoop(); //Use function calls like this.
     },
@@ -58,6 +59,16 @@ const game = {
     },
 
     initFood: function (){
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+
+        let fields = document.getElementsByClassName('field')
+
+        for (let i=0; i<fields.length;i++){
+            if(fields[i].dataset.row==row & fields[i].dataset.col==col){
+                fields[i].style.background='red'
+            }
+        }
 
     },
     removeFood: function (){
