@@ -9,33 +9,84 @@ const game = {
         this.initBoard();
         this.initSnake();
         //TODO: the game setup goes here.
-       this.gameLoop(); //Use function calls like this.
+        this.gameLoop(); //Use function calls like this.
+        this.snakeMovement();
     },
-    gameLoop: function (){
+    gameLoop: function () {
         this.snakeGrow();
 
     },
-    initSnakeBody: function (){
-        for (let j = 0; j<snakeBody.length; j++) {
+    initSnakeBody: function () {
+        for (let i = 0; i < fields.length; i++){
+            fields[i].style.background = "lightgreen"
+        }
+        for (let j = 0; j < snakeBody.length; j++) {
             row = snakeBody[j][0];
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
-                };
-            };
-        };
+                }
+            }
+            ;
+        }
+        ;
     },
-    initSnake: function (){
+    initSnake: function () {
 
-        snakeBody = [[0,1], [0,2]];
+        snakeBody = [[0, 1], [0, 2]];
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
 
 
     },
-    snakeMovement: function (){
+    snakeMovement: function () {
+        window.addEventListener("keydown", checkKeyPress, false);
 
+        function checkKeyPress(key) {
+            if (key.keyCode == "65") {
+                moveLeft()
+                game.initSnakeBody()
+                console.log("a");
+            } else if (key.keyCode == "83") {
+                moveDown()
+                game.initSnakeBody()
+                console.log("s")
+            } else if (key.keyCode == "68") {
+                moveRight()
+                game.initSnakeBody()
+                console.log("d");
+            } else if (key.keyCode == "87") {
+                moveUp()
+                game.initSnakeBody()
+                console.log("w");
+            }
+            console.log(snakeBody)
+        }
+        function moveRight() {
+            let move = [];
+            move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] + 1);
+            snakeBody.shift();
+            snakeBody.push(move)
+        }
+        function moveLeft() {
+            let move = [];
+            move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] - 1);
+            snakeBody.shift();
+            snakeBody.push(move)
+        }
+        function moveUp() {
+            let move = [];
+            move.push(snakeBody[snakeBody.length - 1][0]-1, snakeBody[snakeBody.length - 1][1]);
+            snakeBody.shift();
+            snakeBody.push(move)
+        }
+        function moveDown() {
+            let move = [];
+            move.push(snakeBody[snakeBody.length - 1][0]+1, snakeBody[snakeBody.length - 1][1]);
+            snakeBody.shift();
+            snakeBody.push(move)
+        }
     },
     snakeGrow: function (){
         food = this.initFood()
@@ -135,7 +186,7 @@ const game = {
         Array.isArray(b) &&
         a.length === b.length &&
         a.every((val, index) => val === b[index]);
-    }
 
-}
+    },
+};
 game.initGame();
