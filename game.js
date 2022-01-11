@@ -5,20 +5,24 @@ let col;
 
 const game = {
     initGame: function (){
-        this.initFood();
+
         this.initBoard();
+        food = this.initFood();
         this.initSnake();
+
         //TODO: the game setup goes here.
         this.gameLoop(); //Use function calls like this.
         this.snakeMovement();
     },
     gameLoop: function () {
+        console.log(food ,'food')
         this.snakeGrow();
 
     },
     initSnakeBody: function () {
         for (let i = 0; i < fields.length; i++){
-            fields[i].style.background = "lightgreen"
+            if(fields[i].dataset.row!=food[0] || fields[i].dataset.col != food[1]){fields[i].style.background = "lightgreen"}
+
         }
         for (let j = 0; j < snakeBody.length; j++) {
             row = snakeBody[j][0];
@@ -44,6 +48,7 @@ const game = {
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
+            game.snakeGrow()
             if (key.keyCode == "65") {
                 moveLeft()
                 game.initSnakeBody()
@@ -89,12 +94,13 @@ const game = {
         }
     },
     snakeGrow: function (){
-        food = this.initFood()
-        snakeTailLastPosition = [0, 3];
-        snakeHead = snakeBody[0];
+        console.log(snakeBody[0],'0 posi')
+        snakeTailLastPosition = snakeBody[0];
+        snakeHead = snakeBody[snakeBody.length-1];
         if (this.arrayEquals(food, snakeHead)) {
             snakeBody.push(snakeTailLastPosition)
         };
+        console.log(snakeBody,'snakebody')
         this.initSnakeBody();
     },
     snakeDeath: function (){
