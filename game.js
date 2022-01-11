@@ -2,6 +2,8 @@ let snakeBody, snakeHead, snakeTail, snakeTailLastPosition, fields;
 let food;
 let row;
 let col;
+const rows = 10;
+const cols = 10;
 
 const game = {
     initGame: function (){
@@ -17,6 +19,7 @@ const game = {
     gameLoop: function () {
         console.log(food ,'food')
         this.snakeGrow();
+        this.snakeDeath();
 
     },
     initSnakeBody: function () {
@@ -38,7 +41,7 @@ const game = {
     },
     initSnake: function () {
 
-        snakeBody = [[0, 1], [0, 2]];
+        snakeBody = [[1, 1], [1, 2]];
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
 
@@ -115,11 +118,29 @@ const game = {
 
     },
     snakeDeath: function (){
+        let gameField = document.querySelector(".game-field");
+        const currRow = snakeHead[0];
+        const currCol =snakeHead[1];
+        const firstRow = 0;
+        const lastRow = rows-1;
+        const firstCol = 0;
+        const lastCol = cols-1;
+        if (snakeBody.slice(1, -1).includes(snakeHead)) gameField.insertAdjacentHTML
+        ('beforeend', '<h1>Crossed</h1>');
+        if (currRow === firstRow || currRow === lastRow || currCol === firstCol || currCol === lastCol)
+        {gameField.insertAdjacentHTML
+        ('beforeend', '<h1>Game over</h1>');
+        }
+        else
+        {
+            gameField.insertAdjacentHTML
+        ('beforeend', '<h1>NOT Game over</h1>');
+        }
+
+
 
     },
     initBoard: function (){
-        const rows = 10;
-        const cols = 10;
 
         let gameField = document.querySelector(".game-field");
         this.setGameFieldSize(gameField, rows, cols);
