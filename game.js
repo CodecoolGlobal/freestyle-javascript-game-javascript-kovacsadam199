@@ -54,25 +54,25 @@ const game = {
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
-            if (key.keyCode == "65" && preventLastPressedLetter('a')) {
+            if (key.keyCode == "65" && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
                 console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
                 pressedLetter("a")
 
-            } else if (key.keyCode == "83" && preventLastPressedLetter('s')) {
+            } else if (key.keyCode == "83" && preventLastPressedLetter('s') && preventOppositeLetter('s')) {
                 console.log("s")
                 game.resetIntervals();
                 const loop = setInterval(moveDown, GAMESPEED)
                 pressedLetter("s")
 
-            } else if (key.keyCode == "68" && preventLastPressedLetter('d')) {
+            } else if (key.keyCode == "68" && preventLastPressedLetter('d') && preventOppositeLetter('d')) {
                 console.log("d")
                 game.resetIntervals();
                 const loop = setInterval(moveRight, GAMESPEED)
                 pressedLetter("d")
 
-            } else if (key.keyCode == "87" && preventLastPressedLetter('w')) {
+            } else if (key.keyCode == "87" && preventLastPressedLetter('w') && preventOppositeLetter('w')) {
                 console.log("w")
                 game.resetIntervals();
                 const loop = setInterval(moveUp, GAMESPEED)
@@ -132,11 +132,17 @@ const game = {
             if(PRESSED_LETTER.length === 0){
                 return true
             }
-            if(letter === 'a' && PRESSED_LETTER[0] === 'd'){
+            if(letter === 'a' && PRESSED_LETTER[0] === 'd') {
+                return false
+            }else if(letter === 'd' && PRESSED_LETTER[0] === 'a'){
+                return false
+            }else if(letter === 'w' && PRESSED_LETTER[0] === 's'){
+                return false
+            }else if (letter === 's' && PRESSED_LETTER[0] === 'w'){
                 return false
             }
+            return true
         }
-
     },
     resetIntervals: function () {
     const loop = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
