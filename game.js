@@ -66,36 +66,33 @@ const game = {
             }
         }
         function moveRight() {
-            let move = [];
-            move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] + 1);
-            snakeBody.shift();
-            snakeBody.push(move)
-            game.initSnakeBody()
+            let x = snakeBody[snakeBody.length - 1][0];
+            let y = snakeBody[snakeBody.length - 1][1] + 1;
+            changeSnakesPosition(x, y)
 
         }
         function moveLeft() {
-            let move = [];
-            move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] - 1);
-            snakeBody.shift();
-            snakeBody.push(move)
-            game.initSnakeBody()
+            let x = snakeBody[snakeBody.length - 1][0]
+            let y = snakeBody[snakeBody.length - 1][1] - 1
+            changeSnakesPosition(x, y)
 
         }
         function moveUp() {
-            let move = [];
-            move.push(snakeBody[snakeBody.length - 1][0]-1, snakeBody[snakeBody.length - 1][1]);
-            snakeBody.shift();
-            snakeBody.push(move)
-            game.initSnakeBody()
+            let x = snakeBody[snakeBody.length - 1][0]-1;
+            let y = snakeBody[snakeBody.length - 1][1];
+            changeSnakesPosition(x, y)
 
         }
         function moveDown() {
-            let move = [];
-            move.push(snakeBody[snakeBody.length - 1][0]+1, snakeBody[snakeBody.length - 1][1]);
-            snakeBody.shift();
-            snakeBody.push(move)
-            game.initSnakeBody()
+            let x = snakeBody[snakeBody.length - 1][0]+1;
+            let y = snakeBody[snakeBody.length - 1][1];
+            changeSnakesPosition(x, y)
 
+        }
+        function changeSnakesPosition(snakeBodyX, snakeBodyY){
+            snakeBody.shift();
+            snakeBody.push([snakeBodyX, snakeBodyY]);
+            game.initSnakeBody()
         }
     },
     resetIntervals: function () {
