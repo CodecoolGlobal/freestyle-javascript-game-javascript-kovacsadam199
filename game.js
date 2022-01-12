@@ -109,7 +109,7 @@ const game = {
             snakeBody.push([snakeBodyX, snakeBodyY]);
             game.initSnakeBody()
             game.snakeGrow()
-            game.snakeDeath()
+            game.snakeDeath(checkKeyPress)
             console.log(snakeBody)
         }
         function preventLastPressedLetter(letter){
@@ -166,7 +166,7 @@ const game = {
         this.initSnakeBody()
 
     },
-    snakeDeath: function (){
+    snakeDeath: function (handler){
         let gameField = document.querySelector(".game-field");
         const currRow = snakeHead[0];
         const currCol = snakeHead[1];
@@ -185,6 +185,8 @@ const game = {
         && !document.getElementById("game-over"))
         {gameField.insertAdjacentHTML
         ('beforeend', '<h1 id="game-over">Game over</h1>');
+            window.removeEventListener("keydown", handler, false);
+            this.resetIntervals()
         }
 
 
