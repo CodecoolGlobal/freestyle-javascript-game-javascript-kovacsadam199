@@ -3,6 +3,7 @@ let food;
 let row;
 let col;
 let GAMESPEED = 200
+let PRESSED_LETTER = [];
 
 const game = {
     initGame: function () {
@@ -43,26 +44,29 @@ const game = {
     snakeMovement: function () {
         window.addEventListener("keydown", checkKeyPress, false);
         function checkKeyPress(key) {
-
-            if (key.keyCode == "65") {
+            if (key.keyCode == "65" && preventLastPressedLetter('a')) {
                 console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
+                pressedLetter("a")
 
-            } else if (key.keyCode == "83") {
+            } else if (key.keyCode == "83" && preventLastPressedLetter('s')) {
                 console.log("s")
                 game.resetIntervals();
                 const loop = setInterval(moveDown, GAMESPEED)
+                pressedLetter("s")
 
-            } else if (key.keyCode == "68") {
+            } else if (key.keyCode == "68" && preventLastPressedLetter('d')) {
                 console.log("d")
                 game.resetIntervals();
                 const loop = setInterval(moveRight, GAMESPEED)
+                pressedLetter("d")
 
-            } else if (key.keyCode == "87") {
+            } else if (key.keyCode == "87" && preventLastPressedLetter('w')) {
                 console.log("w")
                 game.resetIntervals();
                 const loop = setInterval(moveUp, GAMESPEED)
+                pressedLetter("w")
             }
         }
         function moveRight() {
@@ -94,6 +98,23 @@ const game = {
             snakeBody.push([snakeBodyX, snakeBodyY]);
             game.initSnakeBody()
         }
+        function preventLastPressedLetter(letter){
+            if(PRESSED_LETTER.length === 0){
+                return true
+            }
+            if(letter === PRESSED_LETTER[0]){
+                return false
+            }
+            return true
+        }
+        function pressedLetter(letter){
+            PRESSED_LETTER.push(letter);
+            if(PRESSED_LETTER.length > 1){
+                PRESSED_LETTER.shift()
+            }
+            console.log(PRESSED_LETTER)
+        }
+
     },
     resetIntervals: function () {
     const loop = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
