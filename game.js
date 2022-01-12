@@ -28,7 +28,7 @@ const game = {
             if(fields[i].dataset.row!=food[0] || fields[i].dataset.col != food[1]){fields[i].style.background = "lightgreen"}
 
         }
-        for (let j = 0; j < snakeBody.length; j++) {
+        for (let j = 0; j < snakeBody.length - 1; j++) {
             row = snakeBody[j][0];
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
@@ -36,9 +36,11 @@ const game = {
                     fields[i].style.background = "blue";
                 }
             }
+            if (fields[i].dataset.row == snakeBody[-1][0] & fields[i].dataset.col == snakeBody[-1][1]) {
+                fields[k].style.background = "yellow";
+            }
             ;
-        }
-        ;
+        };
     },
     initSnake: function () {
 
@@ -153,6 +155,7 @@ const game = {
         };
 
         this.initSnakeBody()
+        return snakeBody
 
     },
     snakeDeath: function (){
@@ -214,21 +217,39 @@ const game = {
                         data-row="${row}"
                         data-col="${col}"></div>`);
     },
-
+    isValidFoodPosition: function (row, col){
+        if(snakeBody) {
+            for (let i = 0; i < snakeBody.length; i++) {
+                if (this.arrayEquals(snakeBody[i], [row, col])) {
+                    console.log('YAAAAAAAAA')
+                    row = Math.floor(Math.random() * 10);
+                    col = Math.floor(Math.random() * 10);
+                    this.isValidFoodPosition(row, col)
+                } else {
+                    console.log('NAAAAAAAAA')
+                    return row, col
+                }
+            }
+        }
+        else {
+            return row, col
+        }
+    },
 
     initFood: function (){
-        let row = Math.floor(Math.random() * 10);
-        let col = Math.floor(Math.random() * 10);
-        console.log('snakebody',snakeBody)
+        let row1 = Math.floor(Math.random() * 10);
+        let col1 = Math.floor(Math.random() * 10);
+        //console.log('snakebody',snakeBody)
+        this.isValidFoodPosition(row1, col1);
 
         let fields = document.getElementsByClassName('field')
 
         for (let i=0; i<fields.length;i++){
-            if(fields[i].dataset.row==row & fields[i].dataset.col==col){
+            if(fields[i].dataset.row==row1 & fields[i].dataset.col==col1){
                 fields[i].style.background='red'
             }
         }
-        return [row, col]
+        return [row1, col1]
 
     },
     removeFood: function (){
