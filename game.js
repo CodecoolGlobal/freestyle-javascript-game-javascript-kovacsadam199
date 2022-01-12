@@ -1,4 +1,4 @@
-let snakeBody, snakeHead, snakeTail, snakeTailLastPosition, fields;
+let snakeBody, snakeTail, snakeTailLastPosition, snakeHead, fields;
 let food;
 let row;
 let col;
@@ -19,7 +19,6 @@ const game = {
     gameLoop: function () {
         console.log(food ,'food')
         this.snakeGrow();
-        //this.snakeDeath();
 
     },
     initSnakeBody: function () {
@@ -34,7 +33,6 @@ const game = {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
                 }
-
             }
             ;
         }
@@ -80,42 +78,37 @@ const game = {
         function moveRight() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] + 1);
-            snakeTail= snakeBody.shift();
+            snakeTailLastPosition= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveLeft() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0], snakeBody[snakeBody.length - 1][1] - 1);
-            snakeTail= snakeBody.shift();
+            snakeTailLastPosition= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveUp() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]-1, snakeBody[snakeBody.length - 1][1]);
-            snakeTail= snakeBody.shift();
+            snakeTailLastPosition= snakeBody.shift();
             snakeBody.push(move)
         }
         function moveDown() {
             let move = [];
             move.push(snakeBody[snakeBody.length - 1][0]+1, snakeBody[snakeBody.length - 1][1]);
-            snakeTail= snakeBody.shift();
+            snakeTailLastPosition= snakeBody.shift();
             snakeBody.push(move)
         }
     },
     snakeGrow: function (){
-        snakeTailLastPosition = snakeBody[0];
         snakeHead = snakeBody[snakeBody.length-1];
+        snakeTail = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
-            snakeBody.unshift(snakeTail)
-            for(let i=0;i<fields.length;i++){
-            if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
-            {
-                fields[i].style.background='lightgreen'
-                food = game.initFood();
-            }
+            snakeBody.unshift(snakeTailLastPosition)
+            game.removeFood();
+            food = game.initFood();
         };
-        };
-        console.log(snakeBody,'snakebody',food,'food')
+
         this.initSnakeBody()
 
     },
@@ -184,6 +177,7 @@ const game = {
     initFood: function (){
         let row = Math.floor(Math.random() * 10);
         let col = Math.floor(Math.random() * 10);
+        console.log('snakebody',snakeBody)
 
         let fields = document.getElementsByClassName('field')
 
@@ -196,6 +190,13 @@ const game = {
 
     },
     removeFood: function (){
+        for(let i=0;i<fields.length;i++){
+            if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
+            {
+                fields[i].style.background='lightgreen'
+
+            }
+        }
 
     },
     isFood: function (){
@@ -230,5 +231,8 @@ const game = {
         a.every((val, index) => val === b[index]);
 
     },
+    generateRandom: function (){
+        //holnap
+    }
 };
 game.initGame();
