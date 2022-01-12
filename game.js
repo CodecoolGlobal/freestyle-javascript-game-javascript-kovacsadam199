@@ -102,13 +102,8 @@ const game = {
         snakeTail = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
             snakeBody.unshift(snakeTailLastPosition)
-            for(let i=0;i<fields.length;i++){
-            if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
-            {
-                fields[i].style.background='lightgreen'
-                food = game.initFood();
-            }
-        };
+            game.removeFood();
+            food = game.initFood();
         };
 
         this.initSnakeBody()
@@ -172,6 +167,13 @@ const game = {
 
     },
     removeFood: function (){
+        for(let i=0;i<fields.length;i++){
+            if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
+            {
+                fields[i].style.background='lightgreen'
+
+            }
+        }
 
     },
     isFood: function (){
