@@ -2,8 +2,8 @@ let snakeBody, snakeHead, snakeTail, snakeTailLastPosition, fields;
 let food;
 let row;
 let col;
-const rows = 10;
-const cols = 10;
+const rows = 11;
+const cols = 11;
 
 const game = {
     initGame: function (){
@@ -19,7 +19,7 @@ const game = {
     gameLoop: function () {
         console.log(food ,'food')
         this.snakeGrow();
-        this.snakeDeath();
+        //this.snakeDeath();
 
     },
     initSnakeBody: function () {
@@ -34,6 +34,7 @@ const game = {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
                 }
+
             }
             ;
         }
@@ -73,6 +74,7 @@ const game = {
                 game.snakeGrow()
                 console.log("w");
             }
+            game.snakeDeath()
             console.log(snakeBody)
         }
         function moveRight() {
@@ -101,9 +103,9 @@ const game = {
         }
     },
     snakeGrow: function (){
-        snakeTailLastPosition = snakeBody[snakeBody.length-1];
-        snakeHead = snakeBody[0];
-        if (this.arrayEquals(food, snakeTailLastPosition)) {
+        snakeTailLastPosition = snakeBody[0];
+        snakeHead = snakeBody[snakeBody.length-1];
+        if (this.arrayEquals(food, snakeHead)) {
             snakeBody.unshift(snakeTail)
             for(let i=0;i<fields.length;i++){
             if(fields[i].dataset.row==food[0] && fields[i].dataset.col==food[1])
@@ -120,21 +122,22 @@ const game = {
     snakeDeath: function (){
         let gameField = document.querySelector(".game-field");
         const currRow = snakeHead[0];
-        const currCol =snakeHead[1];
+        const currCol = snakeHead[1];
         const firstRow = 0;
         const lastRow = rows-1;
         const firstCol = 0;
         const lastCol = cols-1;
-        if (snakeBody.slice(1, -1).includes(snakeHead)) gameField.insertAdjacentHTML
-        ('beforeend', '<h1>Crossed</h1>');
-        if (currRow === firstRow || currRow === lastRow || currCol === firstCol || currCol === lastCol)
-        {gameField.insertAdjacentHTML
-        ('beforeend', '<h1>Game over</h1>');
-        }
-        else
+        const snakeBodySlice = snakeBody.slice(0, -1);
+        for (let i=0; i<snakeBodySlice.length; i++)
         {
-            gameField.insertAdjacentHTML
-        ('beforeend', '<h1>NOT Game over</h1>');
+            if (this.arrayEquals(snakeBodySlice[i],snakeHead)
+            ) gameField.insertAdjacentHTML
+            ('beforeend', '<h1 id="crossed">Crossed</h1>');
+        }
+        if ((currRow === firstRow || currRow === lastRow || currCol === firstCol || currCol === lastCol)
+        && !document.getElementById("game-over"))
+        {gameField.insertAdjacentHTML
+        ('beforeend', '<h1 id="game-over">Game over</h1>');
         }
 
 
@@ -169,9 +172,10 @@ const game = {
     },
 
     addCell: function (rowElement, row, col) {
+        const edgeCells = [0, cols-1];
         rowElement.insertAdjacentHTML(
             'beforeend',
-            `<div class="field"
+            `<div class="field${(edgeCells.includes(row) || edgeCells.includes(col)) ? ' edge' : ''}"
                         data-row="${row}"
                         data-col="${col}"></div>`);
     },
