@@ -6,7 +6,8 @@ let GAMESPEED = 200
 let PRESSED_LETTER = [];
 
 const game = {
-    initGame: function () {
+    initGame: function (){
+        this.initFood();
         this.initBoard();
         this.initSnake();
         //TODO: the game setup goes here.
@@ -123,7 +124,7 @@ const game = {
         }
     },
     snakeGrow: function (){
-        food = [0, 1];
+        food = this.initFood()
         snakeTailLastPosition = [0, 3];
         snakeHead = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
@@ -173,6 +174,17 @@ const game = {
     },
 
     initFood: function (){
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+
+        let fields = document.getElementsByClassName('field')
+
+        for (let i=0; i<fields.length;i++){
+            if(fields[i].dataset.row==row & fields[i].dataset.col==col){
+                fields[i].style.background='red'
+            }
+        }
+        return [row, col]
 
     },
     removeFood: function (){
