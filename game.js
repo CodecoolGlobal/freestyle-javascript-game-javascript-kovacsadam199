@@ -185,8 +185,7 @@ const game = {
         && !document.getElementById("game-over"))
         {gameField.insertAdjacentHTML
         ('beforeend', '<h1 id="game-over">Game over</h1>');
-            window.removeEventListener("keydown", handler, false);
-            this.resetIntervals()
+            this.gameOver(handler)
         }
 
 
@@ -275,8 +274,9 @@ const game = {
     isSnake: function () {
 
     },
-    gameOver: function () {
-
+    gameOver: function (handler) {
+        window.removeEventListener("keydown", handler, false);
+        this.resetIntervals()
     },
     snakeGoesFaster: function () {
 
