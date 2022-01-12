@@ -156,7 +156,7 @@ const game = {
             while (food == 1);
         }
 
-            GAMESPEED = GAMESPEED - speedChange;
+          //
         this.initSnakeBody()
 
     },
@@ -223,8 +223,8 @@ const game = {
 
     initFood: function () {
         let check = 0;
-        let row1 = Math.floor(Math.random() * 10);
-        let col1 = Math.floor(Math.random() * 10);
+        let row1 = this.generateRandom(1,rows-2);
+        let col1 = this.generateRandom(1,cols-2);
         let fields = document.getElementsByClassName('field')
         if (snakeBody) {
             for (let i = 0; i < snakeBody.length; i++) {
@@ -245,7 +245,7 @@ const game = {
                 fields[i].style.background = 'red'
             }
         }
-
+        GAMESPEED = GAMESPEED - speedChange;
         return [row1, col1]
 
     },
@@ -290,8 +290,11 @@ const game = {
             a.every((val, index) => val === b[index]);
 
     },
-    generateRandom: function () {
-        //holnap
-    }
+    generateRandom:function (min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
 };
 game.initGame();
