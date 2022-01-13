@@ -6,10 +6,11 @@ let GAMESPEED = 500, speedChange = 20;
 let PRESSED_LETTER = [];
 const rows = 11;
 const cols = 11;
+let score = 0;
 
 const game = {
     initGame: function () {
-
+        this.initScore();
         this.initBoard();
         food = this.initFood();
         this.initSnake();
@@ -75,25 +76,25 @@ const game = {
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
-            if (key.keyCode == "65" && preventLastPressedLetter('a')) {
+            if (key.keyCode == "65" && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
                 console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
                 pressedLetter("a")
 
-            } else if (key.keyCode == "83" && preventLastPressedLetter('s')) {
+            } else if (key.keyCode == "83" && preventLastPressedLetter('s') && preventOppositeLetter('s')) {
                 console.log("s")
                 game.resetIntervals();
                 const loop = setInterval(moveDown, GAMESPEED)
                 pressedLetter("s")
 
-            } else if (key.keyCode == "68" && preventLastPressedLetter('d')) {
+            } else if (key.keyCode == "68" && preventLastPressedLetter('d') && preventOppositeLetter('d')) {
                 console.log("d")
                 game.resetIntervals();
                 const loop = setInterval(moveRight, GAMESPEED)
                 pressedLetter("d")
 
-            } else if (key.keyCode == "87" && preventLastPressedLetter('w')) {
+            } else if (key.keyCode == "87" && preventLastPressedLetter('w') && preventOppositeLetter('w')) {
                 console.log("w")
                 game.resetIntervals();
                 const loop = setInterval(moveUp, GAMESPEED)
@@ -101,68 +102,83 @@ const game = {
             }
 
         }
+
         function moveRight() {
             let x = snakeBody[snakeBody.length - 1][0];
             let y = snakeBody[snakeBody.length - 1][1] + 1;
             changeSnakesPosition(x, y)
 
         }
+
         function moveLeft() {
             let x = snakeBody[snakeBody.length - 1][0]
             let y = snakeBody[snakeBody.length - 1][1] - 1
             changeSnakesPosition(x, y)
 
         }
+
         function moveUp() {
-            let x = snakeBody[snakeBody.length - 1][0]-1;
+            let x = snakeBody[snakeBody.length - 1][0] - 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
 
         }
+
         function moveDown() {
-            let x = snakeBody[snakeBody.length - 1][0]+1;
+            let x = snakeBody[snakeBody.length - 1][0] + 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
 
         }
-        function changeSnakesPosition(snakeBodyX, snakeBodyY){
+
+        function changeSnakesPosition(snakeBodyX, snakeBodyY) {
             snakeTailLastPosition = snakeBody.shift();
             snakeBody.push([snakeBodyX, snakeBodyY]);
             game.initSnakeBody()
             game.snakeGrow()
-            game.snakeDeath()
+            game.snakeDeath(checkKeyPress)
             console.log(snakeBody)
         }
-        function preventLastPressedLetter(letter){
-            if(PRESSED_LETTER.length === 0){
+
+        function preventLastPressedLetter(letter) {
+            if (PRESSED_LETTER.length === 0) {
                 return true
             }
-            if(letter === PRESSED_LETTER[0]){
+            if (letter === PRESSED_LETTER[0]) {
                 return false
             }
             return true
         }
-        function pressedLetter(letter){
+
+        function pressedLetter(letter) {
             PRESSED_LETTER.push(letter);
-            if(PRESSED_LETTER.length > 1){
+            if (PRESSED_LETTER.length > 1) {
                 PRESSED_LETTER.shift()
             }
             console.log(PRESSED_LETTER)
         }
-        function preventOppositeLetter(letter){
-            if(PRESSED_LETTER.length === 0){
+
+        function preventOppositeLetter(letter) {
+            if (PRESSED_LETTER.length === 0) {
                 return true
             }
-            if(letter === 'a' && PRESSED_LETTER[0] === 'd'){
+            if (letter === 'a' && PRESSED_LETTER[0] === 'd') {
+                return false
+            } else if (letter === 'd' && PRESSED_LETTER[0] === 'a') {
+                return false
+            } else if (letter === 'w' && PRESSED_LETTER[0] === 's') {
+                return false
+            } else if (letter === 's' && PRESSED_LETTER[0] === 'w') {
                 return false
             }
+            return true
         }
-
     },
     resetIntervals: function () {
-    const loop = window.setInterval(function(){}, Number.MAX_SAFE_INTEGER);
-    for(let i = 0; i < loop; i++){
-        window.clearInterval(i)
+        const loop = window.setInterval(function () {
+        }, Number.MAX_SAFE_INTEGER);
+        for (let i = 0; i < loop; i++) {
+            window.clearInterval(i)
         }
     },
     snakeGrow: function () {
@@ -172,41 +188,42 @@ const game = {
         if (this.arrayEquals(food, snakeHead)) {
             snakeBody.unshift(snakeTailLastPosition)
             game.removeFood();
+            game.incScore();
             do {
                 food = game.initFood();
             }
             while (food == 1);
         }
 
-          //
         this.initSnakeBody()
 
     },
-    snakeDeath: function (){
+    snakeDeath: function (handler) {
         let gameField = document.querySelector(".game-field");
         const currRow = snakeHead[0];
         const currCol = snakeHead[1];
         const firstRow = 0;
-        const lastRow = rows-1;
+        const lastRow = rows - 1;
         const firstCol = 0;
-        const lastCol = cols-1;
+        const lastCol = cols - 1;
         const snakeBodySlice = snakeBody.slice(0, -1);
-        for (let i=0; i<snakeBodySlice.length; i++)
-        {
-            if (this.arrayEquals(snakeBodySlice[i],snakeHead)
-            ) gameField.insertAdjacentHTML
-            ('beforeend', '<h1 id="crossed">Crossed</h1>');
+        for (let i=0; i<snakeBodySlice.length; i++) {
+            if (this.arrayEquals(snakeBodySlice[i],snakeHead)){
+                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Crossed</h1>');
+                this.gameOver(handler)
+            }
         }
         if ((currRow === firstRow || currRow === lastRow || currCol === firstCol || currCol === lastCol)
-        && !document.getElementById("game-over"))
-        {gameField.insertAdjacentHTML
-        ('beforeend', '<h1 id="game-over">Game over</h1>');
+            && !document.getElementById("game-over")) {
+            gameField.insertAdjacentHTML
+            ('beforeend', '<h1 id="game-over">Game over</h1>');
+            this.gameOver(handler)
         }
 
 
 
     },
-    initBoard: function (){
+    initBoard: function () {
         let gameField = document.querySelector(".game-field");
         this.setGameFieldSize(gameField, rows, cols);
         let cellIndex = 0
@@ -234,7 +251,7 @@ const game = {
     },
 
     addCell: function (rowElement, row, col) {
-        const edgeCells = [0, cols-1];
+        const edgeCells = [0, cols - 1];
         rowElement.insertAdjacentHTML(
             'beforeend',
             `<div class="field${(edgeCells.includes(row) || edgeCells.includes(col)) ? ' edge' : ''}"
@@ -245,8 +262,8 @@ const game = {
 
     initFood: function () {
         let check = 0;
-        let row1 = this.generateRandom(1,rows-2);
-        let col1 = this.generateRandom(1,cols-2);
+        let row1 = this.generateRandom(1, rows - 2);
+        let col1 = this.generateRandom(1, cols - 2);
         let fields = document.getElementsByClassName('field')
         if (snakeBody) {
             for (let i = 0; i < snakeBody.length; i++) {
@@ -289,9 +306,16 @@ const game = {
     isSnake: function () {
 
     },
-    gameOver: function () {
+    gameOver: function (handler) {
+        window.removeEventListener("keydown", handler, false);
+        this.resetIntervals();
+        let gameField = document.querySelector(".game-field")
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
+
 
     },
+
     snakeGoesFaster: function () {
 
     },
@@ -312,11 +336,26 @@ const game = {
             a.every((val, index) => val === b[index]);
 
     },
-    generateRandom:function (min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
-}
+    generateRandom: function (min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+    },
+    initScore: function (gameField) {
+        gameField = document.querySelector(".game-field");
+        score = 0;
+        gameField.insertAdjacentHTML(
+            'beforeend',
+            '<h1 class="score">Score: 0</h1>'
+        );
+
+    },
+    incScore: function () {
+        score++;
+        scoreField = document.getElementsByClassName('score')[0];
+        scoreField.innerHTML=`Score: ${score}`;
+    }
 
 };
 game.initGame();
+
