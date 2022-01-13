@@ -1,4 +1,4 @@
-h1, h2{
+.instructions, h1, h2{
     display:flex;
     justify-content: center;
     font-family: Helvetica;
@@ -6,6 +6,12 @@ h1, h2{
 
 h1{
     font-size: xxx-large;
+}
+
+button{
+    padding: 5px 5px 5px;
+    margin: 5px 120px 5px 120px;
+    font-size: medium;
 }
 
 .game-field {

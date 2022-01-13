@@ -6,9 +6,11 @@ const cols = 21;
 
 const scoreSound = new Audio('sound_effects/mixkit-extra-bonus-in-a-video-game-2045.wav');
 const gameOverSound = new Audio('sound_effects/mixkit-sad-game-over-trombone-471.wav');
+
 const game = {
 
     initGame: function () {
+        if (window.location.href !== 'index.html') window.location.change = 'startMenu.html';
         this.initScore();
         this.initBoard();
         food = this.initFood();
@@ -49,6 +51,7 @@ const game = {
         }
         ;
     },
+
     initSnake: function () {
         snakeBody = [[1, 1], [1, 2]];
         snakeTailLastPosition = snakeBody[0]
@@ -295,8 +298,7 @@ const game = {
         window.removeEventListener("keydown", handler, false);
         this.resetIntervals();
         let gameField = document.querySelector(".game-field")
-        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
-        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
+        gameField.insertAdjacentHTML('afterbegin', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
     },
     arrayEquals: function (a, b) {
         return Array.isArray(a) &&
