@@ -324,19 +324,6 @@ const game = {
 
     },
 
-    snakeGoesFaster: function () {
-
-    },
-    //EXTRA STUFF
-    score: function () {
-
-    },
-    foodDespawn: function () {
-
-    },
-    invertAxis: function () {
-
-    },
     arrayEquals: function (a, b) {
         return Array.isArray(a) &&
             Array.isArray(b) &&
