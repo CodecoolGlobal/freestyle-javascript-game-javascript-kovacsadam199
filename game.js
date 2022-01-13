@@ -1,16 +1,13 @@
-let snakeBody, snakeTail, snakeTailLastPosition, snakeHead, fields;
-let food;
-let row;
-let col;
-let GAMESPEED = 500, speedChange = 20;
+let snakeBody, snakeTail, snakeTailLastPosition, snakeHead, fields, food, row, col, GAMESPEED = 500, speedChange = 20,
+    score;
 let PRESSED_LETTER = [];
 const rows = 21;
 const cols = 21;
-let score = 0;
-let invertFood;
-let movement;
 
+const scoreSound = new Audio('sound_effects/mixkit-extra-bonus-in-a-video-game-2045.wav');
+const gameOverSound = new Audio('sound_effects/mixkit-sad-game-over-trombone-471.wav');
 const game = {
+
     initGame: function () {
         this.initScore();
         this.initBoard();
@@ -23,27 +20,20 @@ const game = {
         this.snakeMovement();
     },
     gameLoop: function () {
-        console.log(food, 'food')
         this.snakeGrow();
     },
     initSnakeBody: function () {
         this.initSnakeHead();
         let old_eye = document.getElementById('eye');
         if (old_eye) old_eye.remove();
-        for (let i = 0; i < fields.length; i++) {
-            if (fields[i].dataset.row != food[0] || fields[i].dataset.col != food[1]) {
-                if (fields[i].dataset.row != invertFood[0] || fields[i].dataset.col != invertFood[1]) {
-                    fields[i].style.background = "lightgreen"
-                }
-            }
-        }
+        this.removeTail();
         for (let j = 0; j < snakeBody.length; j++) {
             row = snakeBody[j][0];
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "darkgreen";
-                    if(fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]){
+                    if (fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]) {
                         fields[i].style.background = "lightgreen";
                         let eye = document.createElement("img");
                         eye.setAttribute('id', 'eye');
@@ -61,18 +51,20 @@ const game = {
     },
     initSnake: function () {
         snakeBody = [[1, 1], [1, 2]];
+        snakeTailLastPosition = snakeBody[0]
         this.initSnakeHead()
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
     },
-    initSnakeHead: function (){
+    initSnakeHead: function () {
         fields = document.getElementsByClassName("field");
         snakeHead = snakeBody[snakeBody.length - 1];
-        },
-    snakeMovement: function (key1='65',key2='83',key3='68',key4='87') {
+    },
+    snakeMovement: function (key1 = '65', key2 = '83', key3 = '68', key4 = '87') {
         window.addEventListener("keydown", checkKeyPress, false);
+
         function checkKeyPress(key) {
-            if (key.keyCode == key1  && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
+            if (key.keyCode == key1 && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
                 console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
@@ -97,27 +89,33 @@ const game = {
                 pressedLetter("w")
             }
         }
+
         movement = checkKeyPress
+
         function moveRight() {
             let x = snakeBody[snakeBody.length - 1][0];
             let y = snakeBody[snakeBody.length - 1][1] + 1;
             changeSnakesPosition(x, y)
         }
+
         function moveLeft() {
             let x = snakeBody[snakeBody.length - 1][0]
             let y = snakeBody[snakeBody.length - 1][1] - 1
             changeSnakesPosition(x, y)
         }
+
         function moveUp() {
             let x = snakeBody[snakeBody.length - 1][0] - 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
         }
+
         function moveDown() {
             let x = snakeBody[snakeBody.length - 1][0] + 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
         }
+
         function changeSnakesPosition(snakeBodyX, snakeBodyY) {
             snakeTailLastPosition = snakeBody.shift();
             snakeBody.push([snakeBodyX, snakeBodyY]);
@@ -126,6 +124,7 @@ const game = {
             game.snakeDeath(checkKeyPress)
             console.log(snakeBody)
         }
+
         function preventLastPressedLetter(letter) {
             if (PRESSED_LETTER.length === 0) {
                 return true
@@ -135,6 +134,7 @@ const game = {
             }
             return true
         }
+
         function pressedLetter(letter) {
             PRESSED_LETTER.push(letter);
             if (PRESSED_LETTER.length > 1) {
@@ -142,6 +142,7 @@ const game = {
             }
             console.log(PRESSED_LETTER)
         }
+
         function preventOppositeLetter(letter) {
             if (PRESSED_LETTER.length === 0) {
                 return true
@@ -179,9 +180,9 @@ const game = {
             }
             while (food == 1);
         }
-        if(this.arrayEquals(invertFood,snakeHead)){
+        if (this.arrayEquals(invertFood, snakeHead)) {
             window.removeEventListener("keydown", movement);
-            this.snakeMovement('68','87','65','83');
+            this.snakeMovement('68', '87', '65', '83');
             snakeBody.unshift(snakeTailLastPosition)
             game.removeFood(invertFood);
             game.incScore(3);
@@ -266,7 +267,9 @@ const game = {
                 fields[i].style.background = color
             }
         }
-        GAMESPEED = GAMESPEED - speedChange;
+        if (GAMESPEED >= 130) {
+            GAMESPEED = GAMESPEED - speedChange;
+        }
         return [row1, col1]
     },
     removeFood: function (position) {
@@ -275,8 +278,20 @@ const game = {
                 fields[i].style.background = 'lightgreen'
             }
         }
+
+    },
+
+    removeTail: function () {
+        for (let i = 0; i < fields.length; i++) {
+            if (fields[i].dataset.row == snakeTailLastPosition[0] && fields[i].dataset.col == snakeTailLastPosition[1]) {
+                fields[i].style.background = 'lightgreen'
+            }
+            ;
+        }
+        ;
     },
     gameOver: function (handler) {
+        gameOverSound.play();
         window.removeEventListener("keydown", handler, false);
         this.resetIntervals();
         let gameField = document.querySelector(".game-field")
@@ -303,7 +318,8 @@ const game = {
         );
     },
     incScore: function (times) {
-        score+= times;
+        score += times;
+        scoreSound.play();
         scoreField = document.getElementsByClassName('score')[0];
         scoreField.innerHTML = `Score: ${score}`;
     }
