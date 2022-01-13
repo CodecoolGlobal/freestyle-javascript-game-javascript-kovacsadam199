@@ -313,15 +313,6 @@ const game = {
             };
         };
     },
-    isFood: function () {
-
-    },
-    isWall: function () {
-
-    },
-    isSnake: function () {
-
-    },
     gameOver: function (handler) {
         gameOverSound.play();
         window.removeEventListener("keydown", handler, false);
