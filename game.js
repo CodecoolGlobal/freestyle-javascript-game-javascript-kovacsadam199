@@ -175,11 +175,11 @@ const game = {
         const firstCol = 0;
         const lastCol = cols-1;
         const snakeBodySlice = snakeBody.slice(0, -1);
-        for (let i=0; i<snakeBodySlice.length; i++)
-        {
-            if (this.arrayEquals(snakeBodySlice[i],snakeHead)
-            ) gameField.insertAdjacentHTML
-            ('beforeend', '<h1 id="crossed">Crossed</h1>');
+        for (let i=0; i<snakeBodySlice.length; i++) {
+            if (this.arrayEquals(snakeBodySlice[i],snakeHead)){
+                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Crossed</h1>');
+                this.gameOver(handler)
+            }
         }
         if ((currRow === firstRow || currRow === lastRow || currCol === firstCol || currCol === lastCol)
         && !document.getElementById("game-over"))
