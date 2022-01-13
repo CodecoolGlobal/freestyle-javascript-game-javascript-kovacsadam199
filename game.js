@@ -286,8 +286,14 @@ const game = {
     },
     gameOver: function (handler) {
         window.removeEventListener("keydown", handler, false);
-        this.resetIntervals()
+        this.resetIntervals();
+        let gameField = document.querySelector(".game-field")
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
+
+
     },
+
     snakeGoesFaster: function () {
 
     },
