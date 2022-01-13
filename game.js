@@ -28,12 +28,16 @@ const game = {
 
     },
     initSnakeBody: function () {
+        this.initSnakeHead();
+        let old_eye = document.getElementById('eye');
+        if (old_eye) old_eye.remove();
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row != food[0] || fields[i].dataset.col != food[1]) {
                 if (fields[i].dataset.row != invertFood[0] || fields[i].dataset.col != invertFood[1]) {
                     fields[i].style.background = "lightgreen"
                 }
             }
+
         }
         for (let j = 0; j < snakeBody.length; j++) {
             row = snakeBody[j][0];
@@ -41,20 +45,36 @@ const game = {
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
+                    if(fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]){
+                        fields[i].style.background = "lightgreen";
+                        let eye = document.createElement("img");
+                        eye.setAttribute('id', 'eye');
+                        eye.style.position = "relative";
+                        eye.setAttribute('src', '../static/snake_head.png');
+                        fields[i].appendChild(eye);
+                        fields[i].style.display = "flex";
+                        fields[i].style.justifyContent = "center";
+                    }
                 }
             }
             ;
         }
         ;
+
     },
     initSnake: function () {
 
         snakeBody = [[1, 1], [1, 2]];
+        this.initSnakeHead()
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
 
 
     },
+    initSnakeHead: function (){
+        fields = document.getElementsByClassName("field");
+        snakeHead = snakeBody[snakeBody.length - 1];
+        },
     snakeMovement: function (key1='65',key2='83',key3='68',key4='87') {
         window.addEventListener("keydown", checkKeyPress, false);
 
@@ -216,6 +236,7 @@ const game = {
         }
 
 
+
     },
     initBoard: function () {
         let gameField = document.querySelector(".game-field");
@@ -264,7 +285,7 @@ const game = {
                 if (snakeBody[i].includes(row1) & snakeBody[i].includes(col1)) {
                     check = 1
                 }
-                console.log('what happens',invertFood)
+
 
             }
         }
@@ -302,8 +323,14 @@ const game = {
     },
     gameOver: function (handler) {
         window.removeEventListener("keydown", handler, false);
-        this.resetIntervals()
+        this.resetIntervals();
+        let gameField = document.querySelector(".game-field")
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
+        gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
+
+
     },
+
     snakeGoesFaster: function () {
 
     },
