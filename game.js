@@ -24,7 +24,6 @@ const game = {
         this.snakeMovement();
     },
     gameLoop: function () {
-        console.log(food, 'food')
         this.snakeGrow();
 
     },
@@ -50,11 +49,8 @@ const game = {
                         fields[i].style.justifyContent = "center";
                     }
                 }
-            }
-            ;
-        }
-        ;
-
+            };
+        };
     },
     initSnake: function () {
 
