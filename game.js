@@ -330,3 +330,4 @@ const game = {
 
 };
 game.initGame();
+
