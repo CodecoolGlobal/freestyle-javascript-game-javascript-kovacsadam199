@@ -282,6 +282,7 @@ const game = {
         let gameField = document.querySelector(".game-field")
         gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
         gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
+        gameField.insertAdjacentHTML('beforeend','<img src="static/sad_snek.jpg"></img>');
     },
     arrayEquals: function (a, b) {
         return Array.isArray(a) &&
