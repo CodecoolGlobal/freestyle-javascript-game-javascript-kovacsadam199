@@ -4,8 +4,8 @@ let row;
 let col;
 let GAMESPEED = 500, speedChange = 20;
 let PRESSED_LETTER = [];
-const rows = 11;
-const cols = 11;
+const rows = 30;
+const cols = 30;
 
 const game = {
     initGame: function () {
