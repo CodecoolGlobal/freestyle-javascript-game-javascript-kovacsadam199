@@ -24,9 +24,10 @@ const game = {
 
     },
     initSnakeBody: function () {
+        this.initSnakeHead();
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row != food[0] || fields[i].dataset.col != food[1]) {
-                fields[i].style.background = "lightgreen"
+                fields[i].style.background = "lightgreen";
             }
 
         }
@@ -36,21 +37,41 @@ const game = {
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
                     fields[i].style.background = "blue";
+                    if(fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]){
+                        fields[i].style.background = "yellowgreen";
+                        /*let eye = document.createElement("img");
+                        eye.setAttribute('id', 'eye');
+                        eye.style.position = "relative";
+                        eye.setAttribute('src', '../static/snake_head.png');
+                        fields[i].appendChild(eye);
+                        fields[i].style.display = "flex";
+                        fields[i].style.justifyContent = "center";*/
+                    }
                 }
             }
             ;
         }
         ;
+
     },
     initSnake: function () {
 
         snakeBody = [[1, 1], [1, 2]];
+        this.initSnakeHead()
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
 
 
     },
+
+    initSnakeHead: function (){
+        fields = document.getElementsByClassName("field");
+        snakeHead = snakeBody[snakeBody.length - 1];
+        },
+
+
     snakeMovement: function () {
+
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
@@ -145,7 +166,8 @@ const game = {
         }
     },
     snakeGrow: function () {
-        snakeHead = snakeBody[snakeBody.length - 1];
+        this.initSnakeHead();
+        //snakeHead = snakeBody[snakeBody.length - 1];
         snakeTail = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
             snakeBody.unshift(snakeTailLastPosition)
