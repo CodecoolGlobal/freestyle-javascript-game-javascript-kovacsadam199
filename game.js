@@ -7,12 +7,15 @@ let PRESSED_LETTER = [];
 const rows = 11;
 const cols = 11;
 let score = 0;
+let invertFood;
+let movement;
 
 const game = {
     initGame: function () {
         this.initScore();
         this.initBoard();
         food = this.initFood();
+        invertFood = this.initFood('yellow');
         this.initSnake();
 
         //TODO: the game setup goes here.
@@ -30,7 +33,9 @@ const game = {
         if (old_eye) old_eye.remove();
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row != food[0] || fields[i].dataset.col != food[1]) {
-                fields[i].style.background = "lightgreen";
+                if (fields[i].dataset.row != invertFood[0] || fields[i].dataset.col != invertFood[1]) {
+                    fields[i].style.background = "lightgreen"
+                }
             }
 
         }
@@ -66,37 +71,33 @@ const game = {
 
 
     },
-
     initSnakeHead: function (){
         fields = document.getElementsByClassName("field");
         snakeHead = snakeBody[snakeBody.length - 1];
         },
-
-
-    snakeMovement: function () {
-
+    snakeMovement: function (key1='65',key2='83',key3='68',key4='87') {
         window.addEventListener("keydown", checkKeyPress, false);
 
         function checkKeyPress(key) {
-            if (key.keyCode == "65" && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
+            if (key.keyCode == key1  && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
                 console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
                 pressedLetter("a")
 
-            } else if (key.keyCode == "83" && preventLastPressedLetter('s') && preventOppositeLetter('s')) {
+            } else if (key.keyCode == key2 && preventLastPressedLetter('s') && preventOppositeLetter('s')) {
                 console.log("s")
                 game.resetIntervals();
                 const loop = setInterval(moveDown, GAMESPEED)
                 pressedLetter("s")
 
-            } else if (key.keyCode == "68" && preventLastPressedLetter('d') && preventOppositeLetter('d')) {
+            } else if (key.keyCode == key3 && preventLastPressedLetter('d') && preventOppositeLetter('d')) {
                 console.log("d")
                 game.resetIntervals();
                 const loop = setInterval(moveRight, GAMESPEED)
                 pressedLetter("d")
 
-            } else if (key.keyCode == "87" && preventLastPressedLetter('w') && preventOppositeLetter('w')) {
+            } else if (key.keyCode == key4 && preventLastPressedLetter('w') && preventOppositeLetter('w')) {
                 console.log("w")
                 game.resetIntervals();
                 const loop = setInterval(moveUp, GAMESPEED)
@@ -104,7 +105,7 @@ const game = {
             }
 
         }
-
+        movement = checkKeyPress
         function moveRight() {
             let x = snakeBody[snakeBody.length - 1][0];
             let y = snakeBody[snakeBody.length - 1][1] + 1;
@@ -184,16 +185,29 @@ const game = {
         }
     },
     snakeGrow: function () {
-        //this.initSnakeHead();
+        snakeHead = snakeBody[snakeBody.length - 1];
         snakeTail = snakeBody[0];
         if (this.arrayEquals(food, snakeHead)) {
+            window.removeEventListener("keydown", movement);
+            this.snakeMovement();
             snakeBody.unshift(snakeTailLastPosition)
-            game.removeFood();
-            game.incScore();
+            game.removeFood(food);
+            game.incScore(1);
             do {
                 food = game.initFood();
             }
             while (food == 1);
+        }
+        if(this.arrayEquals(invertFood,snakeHead)){
+            window.removeEventListener("keydown", movement);
+            this.snakeMovement('68','87','65','83');
+            snakeBody.unshift(snakeTailLastPosition)
+            game.removeFood(invertFood);
+            game.incScore(3);
+            do {
+                invertFood = game.initFood('yellow');
+            }
+            while (invertFood == 1);
         }
 
         this.initSnakeBody()
@@ -208,8 +222,8 @@ const game = {
         const firstCol = 0;
         const lastCol = cols - 1;
         const snakeBodySlice = snakeBody.slice(0, -1);
-        for (let i=0; i<snakeBodySlice.length; i++) {
-            if (this.arrayEquals(snakeBodySlice[i],snakeHead)){
+        for (let i = 0; i < snakeBodySlice.length; i++) {
+            if (this.arrayEquals(snakeBodySlice[i], snakeHead)) {
                 gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Crossed</h1>');
                 this.gameOver(handler)
             }
@@ -261,7 +275,7 @@ const game = {
     },
 
 
-    initFood: function () {
+    initFood: function (color = 'red') {
         let check = 0;
         let row1 = this.generateRandom(1, rows - 2);
         let col1 = this.generateRandom(1, cols - 2);
@@ -282,16 +296,16 @@ const game = {
         }
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row == row1 & fields[i].dataset.col == col1) {
-                fields[i].style.background = 'red'
+                fields[i].style.background = color
             }
         }
         GAMESPEED = GAMESPEED - speedChange;
         return [row1, col1]
 
     },
-    removeFood: function () {
+    removeFood: function (position) {
         for (let i = 0; i < fields.length; i++) {
-            if (fields[i].dataset.row == food[0] && fields[i].dataset.col == food[1]) {
+            if (fields[i].dataset.row == position[0] && fields[i].dataset.col == position[1]) {
                 fields[i].style.background = 'lightgreen'
 
             }
@@ -351,12 +365,11 @@ const game = {
         );
 
     },
-    incScore: function () {
-        score++;
+    incScore: function (times) {
+        score+= times;
         scoreField = document.getElementsByClassName('score')[0];
-        scoreField.innerHTML=`Score: ${score}`;
+        scoreField.innerHTML = `Score: ${score}`;
     }
 
 };
 game.initGame();
-
