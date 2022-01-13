@@ -4,8 +4,8 @@ let row;
 let col;
 let GAMESPEED = 500, speedChange = 20;
 let PRESSED_LETTER = [];
-const rows = 11;
-const cols = 11;
+const rows = 21;
+const cols = 21;
 let score = 0;
 let invertFood;
 let movement;
@@ -42,7 +42,7 @@ const game = {
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
-                    fields[i].style.background = "blue";
+                    fields[i].style.background = "darkgreen";
                     if(fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]){
                         fields[i].style.background = "lightgreen";
                         let eye = document.createElement("img");
@@ -203,7 +203,7 @@ const game = {
         const snakeBodySlice = snakeBody.slice(0, -1);
         for (let i = 0; i < snakeBodySlice.length; i++) {
             if (this.arrayEquals(snakeBodySlice[i], snakeHead)) {
-                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Crossed</h1>');
+                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Game over</h1>');
                 this.gameOver(handler)
             }
         }
@@ -299,7 +299,7 @@ const game = {
         score = 0;
         gameField.insertAdjacentHTML(
             'beforeend',
-            '<h1 class="score">Score: 0</h1>'
+            '<h2 class="score">Score: 0</h2>'
         );
     },
     incScore: function (times) {
