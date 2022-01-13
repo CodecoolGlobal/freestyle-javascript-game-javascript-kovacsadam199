@@ -28,3 +28,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+.button-box{
+    margin-top: 100px;
+    text-align: center;
+}
+#link{
+    font-size: 50px;
+    text-align: center;
+}
