@@ -9,7 +9,8 @@ const cols = 11;
 let score = 0;
 let invertFood;
 let movement;
-
+const scoreSound = new Audio('sound_effects/mixkit-extra-bonus-in-a-video-game-2045.wav');
+const gameOverSound = new Audio('sound_effects/mixkit-sad-game-over-trombone-471.wav');
 const game = {
     initGame: function () {
         this.initScore();
@@ -31,14 +32,7 @@ const game = {
         this.initSnakeHead();
         let old_eye = document.getElementById('eye');
         if (old_eye) old_eye.remove();
-        for (let i = 0; i < fields.length; i++) {
-            if (fields[i].dataset.row != food[0] || fields[i].dataset.col != food[1]) {
-                if (fields[i].dataset.row != invertFood[0] || fields[i].dataset.col != invertFood[1]) {
-                    fields[i].style.background = "lightgreen"
-                }
-            }
-
-        }
+        this.removeTail();
         for (let j = 0; j < snakeBody.length; j++) {
             row = snakeBody[j][0];
             col = snakeBody[j][1];
@@ -65,6 +59,7 @@ const game = {
     initSnake: function () {
 
         snakeBody = [[1, 1], [1, 2]];
+        snakeTailLastPosition = snakeBody[0]
         this.initSnakeHead()
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
@@ -285,8 +280,6 @@ const game = {
                 if (snakeBody[i].includes(row1) & snakeBody[i].includes(col1)) {
                     check = 1
                 }
-
-
             }
         }
 
@@ -312,6 +305,14 @@ const game = {
         }
 
     },
+
+    removeTail: function () {
+        for (let i = 0; i < fields.length; i++) {
+            if (fields[i].dataset.row == snakeTailLastPosition[0] && fields[i].dataset.col == snakeTailLastPosition[1]) {
+                fields[i].style.background = 'lightgreen'
+            };
+        };
+    },
     isFood: function () {
 
     },
@@ -322,6 +323,7 @@ const game = {
 
     },
     gameOver: function (handler) {
+        gameOverSound.play();
         window.removeEventListener("keydown", handler, false);
         this.resetIntervals();
         let gameField = document.querySelector(".game-field")
@@ -367,6 +369,7 @@ const game = {
     },
     incScore: function (times) {
         score+= times;
+        scoreSound.play();
         scoreField = document.getElementsByClassName('score')[0];
         scoreField.innerHTML = `Score: ${score}`;
     }
