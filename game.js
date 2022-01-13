@@ -4,8 +4,8 @@ let row;
 let col;
 let GAMESPEED = 500, speedChange = 20;
 let PRESSED_LETTER = [];
-const rows = 11;
-const cols = 11;
+const rows = 21;
+const cols = 21;
 let score = 0;
 let invertFood;
 let movement;
@@ -25,7 +25,6 @@ const game = {
     },
     gameLoop: function () {
         this.snakeGrow();
-
     },
     initSnakeBody: function () {
         this.initSnakeHead();
@@ -37,7 +36,7 @@ const game = {
             col = snakeBody[j][1];
             for (let i = 0; i < fields.length; i++) {
                 if (fields[i].dataset.row == row & fields[i].dataset.col == col) {
-                    fields[i].style.background = "blue";
+                    fields[i].style.background = "darkgreen";
                     if(fields[i].dataset.row == snakeHead[0] && fields[i].dataset.col == snakeHead[1]){
                         fields[i].style.background = "lightgreen";
                         let eye = document.createElement("img");
@@ -53,14 +52,11 @@ const game = {
         };
     },
     initSnake: function () {
-
         snakeBody = [[1, 1], [1, 2]];
         snakeTailLastPosition = snakeBody[0]
         this.initSnakeHead()
         fields = document.getElementsByClassName("field");
         this.initSnakeBody();
-
-
     },
     initSnakeHead: function (){
         fields = document.getElementsByClassName("field");
@@ -68,7 +64,6 @@ const game = {
         },
     snakeMovement: function (key1='65',key2='83',key3='68',key4='87') {
         window.addEventListener("keydown", checkKeyPress, false);
-
         function checkKeyPress(key) {
             if (key.keyCode == key1  && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
                 console.log("a")
@@ -94,37 +89,28 @@ const game = {
                 const loop = setInterval(moveUp, GAMESPEED)
                 pressedLetter("w")
             }
-
         }
         movement = checkKeyPress
         function moveRight() {
             let x = snakeBody[snakeBody.length - 1][0];
             let y = snakeBody[snakeBody.length - 1][1] + 1;
             changeSnakesPosition(x, y)
-
         }
-
         function moveLeft() {
             let x = snakeBody[snakeBody.length - 1][0]
             let y = snakeBody[snakeBody.length - 1][1] - 1
             changeSnakesPosition(x, y)
-
         }
-
         function moveUp() {
             let x = snakeBody[snakeBody.length - 1][0] - 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
-
         }
-
         function moveDown() {
             let x = snakeBody[snakeBody.length - 1][0] + 1;
             let y = snakeBody[snakeBody.length - 1][1];
             changeSnakesPosition(x, y)
-
         }
-
         function changeSnakesPosition(snakeBodyX, snakeBodyY) {
             snakeTailLastPosition = snakeBody.shift();
             snakeBody.push([snakeBodyX, snakeBodyY]);
@@ -133,7 +119,6 @@ const game = {
             game.snakeDeath(checkKeyPress)
             console.log(snakeBody)
         }
-
         function preventLastPressedLetter(letter) {
             if (PRESSED_LETTER.length === 0) {
                 return true
@@ -143,7 +128,6 @@ const game = {
             }
             return true
         }
-
         function pressedLetter(letter) {
             PRESSED_LETTER.push(letter);
             if (PRESSED_LETTER.length > 1) {
@@ -151,7 +135,6 @@ const game = {
             }
             console.log(PRESSED_LETTER)
         }
-
         function preventOppositeLetter(letter) {
             if (PRESSED_LETTER.length === 0) {
                 return true
@@ -200,9 +183,7 @@ const game = {
             }
             while (invertFood == 1);
         }
-
         this.initSnakeBody()
-
     },
     snakeDeath: function (handler) {
         let gameField = document.querySelector(".game-field");
@@ -215,7 +196,7 @@ const game = {
         const snakeBodySlice = snakeBody.slice(0, -1);
         for (let i = 0; i < snakeBodySlice.length; i++) {
             if (this.arrayEquals(snakeBodySlice[i], snakeHead)) {
-                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Crossed</h1>');
+                gameField.insertAdjacentHTML('beforeend', '<h1 id="crossed">Game over</h1>');
                 this.gameOver(handler)
             }
         }
@@ -225,9 +206,6 @@ const game = {
             ('beforeend', '<h1 id="game-over">Game over</h1>');
             this.gameOver(handler)
         }
-
-
-
     },
     initBoard: function () {
         let gameField = document.querySelector(".game-field");
@@ -242,12 +220,10 @@ const game = {
             }
         }
     },
-
     setGameFieldSize: function (gameField, rows, cols) {
         gameField.style.width = (gameField.dataset.cellWidth * rows) + 'px';
         gameField.style.height = (gameField.dataset.cellHeight * cols) + 'px';
     },
-
     addRow: function (gameField) {
         gameField.insertAdjacentHTML(
             'beforeend',
@@ -255,7 +231,6 @@ const game = {
         );
         return gameField.lastElementChild;
     },
-
     addCell: function (rowElement, row, col) {
         const edgeCells = [0, cols - 1];
         rowElement.insertAdjacentHTML(
@@ -264,8 +239,6 @@ const game = {
                         data-row="${row}"
                         data-col="${col}"></div>`);
     },
-
-
     initFood: function (color = 'red') {
         let check = 0;
         let row1 = this.generateRandom(1, rows - 2);
@@ -278,10 +251,8 @@ const game = {
                 }
             }
         }
-
         if (check == 1) {
             return 1
-
         }
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row == row1 & fields[i].dataset.col == col1) {
@@ -290,13 +261,11 @@ const game = {
         }
         GAMESPEED = GAMESPEED - speedChange;
         return [row1, col1]
-
     },
     removeFood: function (position) {
         for (let i = 0; i < fields.length; i++) {
             if (fields[i].dataset.row == position[0] && fields[i].dataset.col == position[1]) {
                 fields[i].style.background = 'lightgreen'
-
             }
         }
 
@@ -316,16 +285,12 @@ const game = {
         let gameField = document.querySelector(".game-field")
         gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'startMenu.html\'">Back to menu</button>')
         gameField.insertAdjacentHTML('beforeend', '<button onclick="window.location.href = \'index.html\'">Restart</button>')
-
-
     },
-
     arrayEquals: function (a, b) {
         return Array.isArray(a) &&
             Array.isArray(b) &&
             a.length === b.length &&
             a.every((val, index) => val === b[index]);
-
     },
     generateRandom: function (min, max) {
         min = Math.ceil(min);
@@ -337,9 +302,8 @@ const game = {
         score = 0;
         gameField.insertAdjacentHTML(
             'beforeend',
-            '<h1 class="score">Score: 0</h1>'
+            '<h2 class="score">Score: 0</h2>'
         );
-
     },
     incScore: function (times) {
         score+= times;
@@ -347,6 +311,5 @@ const game = {
         scoreField = document.getElementsByClassName('score')[0];
         scoreField.innerHTML = `Score: ${score}`;
     }
-
 };
 game.initGame();
