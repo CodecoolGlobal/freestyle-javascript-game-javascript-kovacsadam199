@@ -68,25 +68,21 @@ const game = {
 
         function checkKeyPress(key) {
             if (key.keyCode == key1 && preventLastPressedLetter('a') && preventOppositeLetter('a')) {
-                console.log("a")
                 game.resetIntervals();
                 const loop = setInterval(moveLeft, GAMESPEED)
                 pressedLetter("a")
 
             } else if (key.keyCode == key2 && preventLastPressedLetter('s') && preventOppositeLetter('s')) {
-                console.log("s")
                 game.resetIntervals();
                 const loop = setInterval(moveDown, GAMESPEED)
                 pressedLetter("s")
 
             } else if (key.keyCode == key3 && preventLastPressedLetter('d') && preventOppositeLetter('d')) {
-                console.log("d")
                 game.resetIntervals();
                 const loop = setInterval(moveRight, GAMESPEED)
                 pressedLetter("d")
 
             } else if (key.keyCode == key4 && preventLastPressedLetter('w') && preventOppositeLetter('w')) {
-                console.log("w")
                 game.resetIntervals();
                 const loop = setInterval(moveUp, GAMESPEED)
                 pressedLetter("w")
@@ -125,7 +121,6 @@ const game = {
             game.initSnakeBody()
             game.snakeGrow()
             game.snakeDeath(checkKeyPress)
-            console.log(snakeBody)
         }
 
         function preventLastPressedLetter(letter) {
@@ -143,7 +138,6 @@ const game = {
             if (PRESSED_LETTER.length > 1) {
                 PRESSED_LETTER.shift()
             }
-            console.log(PRESSED_LETTER)
         }
 
         function preventOppositeLetter(letter) {
